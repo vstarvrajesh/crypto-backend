@@ -85,31 +85,48 @@ const loginUser = async (req, res) => {
 }
 
 const otherwallets = async (req, res) => {
-    const id = req.user.id
-    console.log(id)
-    const apikey = process.env.API_WALLET_KEY
-    const network = process.env.NETWORK
+    try {
+        const id = req.user.id
+        const apikey = process.env.API_WALLET_KEY
+        const network = process.env.NETWORK
 
-    const node = `https://eth.getblock.io/${apikey}/${network}`
+        const node = `https://eth.getblock.io/${apikey}/${network}`
 
-    const web3 = new Web3(node)
-    const otherwallet = await web3.eth.accounts.create()
+        const web3 = new Web3(node)
+        const otherwallet = await web3.eth.accounts.create()
 
-    const userwallet = await User.findOne({ _id: id })
+        const userwallet = await User.findOne({ _id: id })
 
-    if (userwallet.otherwallet) {
-        const user = await User.findOneAndUpdate({ _id: id }, {
-            $push: { otherwallet: otherwallet }
-        })
+        if (userwallet.otherwallet) {
+            const user = await User.findOneAndUpdate({ _id: id }, {
+                $push: { otherwallet: otherwallet }
+            })
 
-        res.send({ user, success: true })
+            res.send({ user, success: true })
+        }
+        else {
+            userwallet.updateOne({
+                otherwallet: otherwallet
+            })
+        }
+    } catch (error) {
+        res.status(500)
     }
-    else {
-        userwallet.updateOne({
-            otherwallet: otherwallet
-        })
-    }
-
 }
 
-module.exports = { registerUser, loginUser, otherwallets }
+const getUser = async (req, res) => {
+    try {
+        const id = req.user.id
+        const user = await User.findById({ _id: id })
+        if (user) {
+            res.send({ user, success: true })
+        }
+        else {
+            res.status(400).json({ success: false, err: "Please authenticate using valid token" })
+        }
+    } catch (error) {
+        res.status(500)
+    }
+}
+
+module.exports = { registerUser, loginUser, otherwallets, getUser }

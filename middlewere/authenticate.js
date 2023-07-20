@@ -2,17 +2,19 @@ const jwt = require("jsonwebtoken")
 const User = require("../models/UserModel")
 
 const authentication = async (req, res, next) => {
-    const token = req.header("token")
-    const userdata = jwt.verify(token, process.env.SEC_KEY)
-    const verifyuser = await User.findOne({ _id: userdata.user.id })
+    try {
+        const token = req.header("token")
+        let userdata = jwt.verify(token, process.env.SEC_KEY)
+        if (userdata) {
+            req.user = userdata.user
+            next()
+        } else {
+            res.status(400).json("Please enter a valid token")
+        }
+    } catch (error) {
+        res.status(400).json(error)
+    }
 
-    if (verifyuser) {
-        req.user = userdata.user
-        next()
-    }
-    else {
-        res.status(400).json("Please validate using a token")
-    }
 }
 
 module.exports = authentication

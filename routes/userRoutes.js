@@ -1,8 +1,7 @@
 const express = require("express");
-const { registerUser, loginUser, otherwallets } = require("../controllers/userController");
+const { registerUser, loginUser, otherwallets, getUser } = require("../controllers/userController");
 const { body } = require("express-validator");
 const authentication = require("../middlewere/authenticate");
-
 const router = express.Router();
 
 const createEmailChain = () => body("email", "Please enter a valid email").isEmail()
@@ -14,5 +13,7 @@ router.route("/register").post(createEmailChain(), createPasswordChain(), create
 router.route("/login").post(createEmailChain(), createPasswordChain(), loginUser);
 
 router.route("/addwallet").post(authentication, otherwallets)
+
+router.route("/getuser").get(authentication, getUser)
 
 module.exports = router;
