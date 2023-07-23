@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.route("/transaction").post(authentication, signedTx)
 
-router.route("/estimategas").post(authentication, estimateGas)
+router.route("/estimategas").post(estimateGas)
 
-router.route("txhistory").get(authentication, txhistory)
+router.route("/txhistory").get(authentication, txhistory)
+
+module.exports = router;
