@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose
 
-const transictionModel = new mongoose.model(
+const transictionModel = new mongoose.Schema(
     {
         userId: {
             type: String,
@@ -12,7 +12,7 @@ const transictionModel = new mongoose.model(
         }
     },
     {
-        timestamps: true,
+        timestamps: true
     }
 )
 
