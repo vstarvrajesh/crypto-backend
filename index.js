@@ -56,7 +56,7 @@ const bal = async () => {
     console.log(web3.utils.fromWei(val))
     // const pasttx = await web3.eth.getTransaction("0x436e8c8f3f99d66e6ee7bbf3ae2280eebe93e1662996a036fa96107304962f41").then(console.log)
 }
-// bal()
+bal()
 // Moralias.start({
 //     apiKey: "TM4117zy383BE8heoyiaj5v9CzM3kwLUH9RZtcACAzBWvhw7BoX5GvXlN2zEEae0"
 // }).then((data) => console.log(data))

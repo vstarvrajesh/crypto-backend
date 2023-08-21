@@ -83,4 +83,18 @@ const txhistory = async (req, res) => {
     }
 }
 
-module.exports = { signedTx, txhistory, estimateGas }
+const getUserBal = async (req, res) => {
+    const userId = req.user.id
+    const apikey = process.env.API_WALLET_KEY
+    const network = 'testnet'
+    const node = `https://matic.getblock.io/${apikey}/${network}`
+    const web3 = new Web3(node)
+
+    const user = await User.findOne({ _id: userId })
+    console.log(user.primarywallet.address);
+    const primarywallet_add = user.primarywallet.address
+    const balance = await web3.eth.getBalance(primarywallet_add)
+    res.send({ balance: web3.utils.fromWei(balance) })
+}
+
+module.exports = { signedTx, txhistory, estimateGas, getUserBal }
